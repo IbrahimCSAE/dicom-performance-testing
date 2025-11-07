@@ -1,0 +1,7 @@
+.terraform
+.terraform.lock.hcl
+aws_key
+aws_key.pub
+inventory.ini
+terraform.tfstate
+terraform.tfstate.backup

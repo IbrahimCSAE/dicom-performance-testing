@@ -1,0 +1,30 @@
+---
+- hosts: orthanc
+  become: yes
+  tasks:
+    - name: Update apt cache
+      apt: update_cache=yes
+
+    - name: Install Orthanc
+      apt:
+        name: orthanc
+        state: present
+
+    - name: Enable Orthanc to start on boot
+      systemd:
+        name: orthanc
+        enabled: yes
+        state: started
+
+    - name: Allow remote access (simple config)
+      lineinfile:
+        path: /etc/orthanc/orthanc.json
+        regexp: '"RemoteAccessAllowed"'
+        line: '  "RemoteAccessAllowed" : true,'
+      notify: restart orthanc
+
+  handlers:
+    - name: restart orthanc
+      systemd:
+        name: orthanc
+        state: restarted
